@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess Ghost Feet - Streamer Edition</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: #1a1a24;
+            --neon-pink: #ff007f;
+            --neon-blue: #00f3ff;
+            --neon-green: #00ff66;
+            --text-color: #ffffff;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            font-size: 2.3rem;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #b3b3b3;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+        .game-container {
+            background: var(--card-bg);
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 20px var(--neon-pink);
+            border-radius: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            background: #111118;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .question-text {
+            font-size: 1.3rem;
+            color: var(--neon-green);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .images-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .image-card {
+            background: #000;
+            border: 3px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: scale(1.03);
+        }
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #result-message {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 30px;
+        }
+        .btn-reset {
+            background: var(--neon-pink);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: none;
+        }
+        .btn-reset:hover {
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>👻 Guess Ghost Feet 🦶</h1>
+    <div class="subtitle">Find the real streamer foot among the funny options!</div>
+
+    <div class="game-container">
+        <div class="score-board">
+            <div>Score: <span id="score">0</span></div>
+            <div>Rank: <span id="rank">Table Sleeper 💤</span></div>
+        </div>
+
+        <div class="question-text">Which one is the REAL streamer's foot under the desk? 🤔</div>
+
+        <div class="images-grid">
+            <!-- ضع هنا روابط الصور الأربعة (واحدة حقيقية والثلاثة الأخرى صور وهمية أو مضحكة) -->
+            <div class="image-card" onclick="makeGuess(false)">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbEKwUszPXHKUta3D0xpmQTUVMx1bRs7ud51X6gb5aK2cueSD14_DyFDpy&s=10" alt="Fake Foot 1">
+            </div>
+            <div class="image-card" onclick="makeGuess(true)">
+                <!-- استبدل الرابط أدناه برابط صورتك الحقيقية التي أرسلتها -->
+                <img src="well well ghost.png" alt="Real Ghost Foot">
+            </div>
+            <div class="image-card" onclick="makeGuess(false)">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl34hdmsIOsg1PKYLsD1pBsljeWsutc6KXj7tJ4gZ0DFjzohDeBZr2YeE&s=10" alt="Fake Foot 2">
+            </div>
+            <div class="image-card" onclick="makeGuess(false)">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGE1moyjGKaFJOQB4qkrjfQ7X4E3Oklv8NV4d9adQxAY2JG_HdZV5_RSc0&s=10" alt="Fake Foot 3">
+            </div>
+        </div>
+
+        <div id="result-message"></div>
+        <button class="btn-reset" id="reset-btn" onclick="resetGame()">Play Again 🔄</button>
+    </div>
+
+    <script>
+        let score = 0;
+
+        function makeGuess(isReal) {
+            const result = document.getElementById("result-message");
+            const resetBtn = document.getElementById("reset-btn");
+
+            if (isReal) {
+                score += 10;
+                result.style.color = "var(--neon-green)";
+                result.innerHTML = "🎉 Correct! That is the legendary real streamer foot!";
+                if(score >= 20) {
+                    document.getElementById("rank").innerText = "👑 Ghost Foot Master";
+                }
+            } else {
+                result.style.color = "var(--neon-pink)";
+                result.innerHTML = "❌ Wrong! That's just a random meme foot. Try again!";
+            }
+
+            document.getElementById("score").innerText = score;
+            resetBtn.style.display = "inline-block";
+        }
+
+        function resetGame() {
+            document.getElementById("result-message").innerHTML = "";
+            document.getElementById("reset-btn").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
